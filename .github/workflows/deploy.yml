@@ -37,7 +37,7 @@ jobs:
           mkdir -p page/console
 
           cp index.template.html page/console/index.html
-          sed -i 's/{{PYODIDE_VERSION}}/v0.27.0/g' page/console/index.html
+          sed -i 's/{{PYODIDE_VERSION}}/v0.27.7/g' page/console/index.html
           sed -i "s#{{MLIR_PYTHON_WHEEL_PATH}}#../static/${MLIR_PYTHON_WHEEL_NAME}#g" page/console/index.html
 
       - name: Setup Python
@@ -53,8 +53,7 @@ jobs:
         run: |
           mkdir -p page/jupyter
 
-          wget -O pyodide.js https://cdn.jsdelivr.net/pyodide/v0.27.0/full/pyodide.js
-          jupyter lite build --output-dir page/jupyter --piplite-wheels ./page/static/$MLIR_PYTHON_WHEEL_NAME --pyodide pyodide.js
+          jupyter lite build --output-dir page/jupyter --piplite-wheels ./page/static/$MLIR_PYTHON_WHEEL_NAME --pyodide https://cdn.jsdelivr.net/pyodide/v0.27.0/full/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
