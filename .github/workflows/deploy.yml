@@ -51,10 +51,9 @@ jobs:
 
       - name: Create WASM jupyterlite page
         run: |
-          mkdir -p content
           mkdir -p page/jupyter
 
-          jupyter lite build --contents content --output-dir page/jupyter
+          jupyter lite build --output-dir page/jupyter --piplite-wheels=./page/static/$MLIR_PYTHON_WHEEL_NAME
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
