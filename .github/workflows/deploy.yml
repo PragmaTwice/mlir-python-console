@@ -1,0 +1,38 @@
+name: Deploy
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Create WASM playground page
+        run: |
+          mkdir -p page
+
+          MLIR_PYTHON_WHEEL_NAME=$(gh release view mlir-python-bindings --json 'assets' -q '[.assets[] | select(.name | contains("cp312-pyodide")) | .name] | last')
+          MLIR_PYTHON_WHEEL_URL=$(gh release view mlir-python-bindings --json 'assets' -q '[.assets[] | select(.name | contains("cp312-pyodide")) | .url] | last')
+          echo "Downloading ${MLIR_PYTHON_WHEEL_NAME} from ${MLIR_PYTHON_WHEEL_URL}"
+          wget -O page/${MLIR_PYTHON_WHEEL_NAME} "${MLIR_PYTHON_WHEEL_URL}"
+
+          cp index.template.html page/index.html
+          sed -i 's/{{PYODIDE_VERSION}}/v0.27.0/g' page/index.html
+          sed -i "s/{{MLIR_PYTHON_WHEEL_PATH}}/${MLIR_PYTHON_WHEEL_NAME}/g" page/index.html
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: page
+  
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
