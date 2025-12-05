@@ -53,7 +53,7 @@ jobs:
         run: |
           mkdir -p page/jupyter
 
-          jupyter lite build --output-dir page/jupyter --piplite-wheels=./page/static/$MLIR_PYTHON_WHEEL_NAME
+          jupyter lite build --output-dir page/jupyter --piplite-wheels ./page/static/$MLIR_PYTHON_WHEEL_NAME --pyodide https://cdn.jsdelivr.net/pyodide/v0.27.0/full/pyodide.js
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
