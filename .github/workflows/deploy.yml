@@ -35,7 +35,7 @@ jobs:
           EUDSL_PYTHON_EXTRAS_NAME=$(gh release view eudsl-python-extras --repo llvm/eudsl --json 'assets' -q '.assets | last | .name')
           EUDSL_PYTHON_EXTRAS_URL=$(gh release view eudsl-python-extras --repo llvm/eudsl --json 'assets' -q '.assets | last | .url')
           echo "Downloading ${EUDSL_PYTHON_EXTRAS_NAME} from ${EUDSL_PYTHON_EXTRAS_URL}"
-          wget -O page/static/${EUDSL_PYTHON_EXTRAS_NAME} "${MLIR_PYTHON_WHEEL_URL}"
+          wget -O page/static/${EUDSL_PYTHON_EXTRAS_NAME} "${EUDSL_PYTHON_EXTRAS_URL}"
           echo "EUDSL_PYTHON_EXTRAS_NAME=$EUDSL_PYTHON_EXTRAS_NAME" >> $GITHUB_ENV
           echo "EUDSL_PYTHON_EXTRAS_URL=$EUDSL_PYTHON_EXTRAS_URL" >> $GITHUB_ENV
   
