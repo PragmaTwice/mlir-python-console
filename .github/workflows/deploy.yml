@@ -32,6 +32,13 @@ jobs:
           echo "MLIR_PYTHON_WHEEL_NAME=$MLIR_PYTHON_WHEEL_NAME" >> $GITHUB_ENV
           echo "MLIR_PYTHON_WHEEL_URL=$MLIR_PYTHON_WHEEL_URL" >> $GITHUB_ENV
 
+          EUDSL_PYTHON_EXTRAS_NAME=$(gh release view eudsl-python-extras --repo llvm/eudsl --json 'assets' -q '.assets | last | .name')
+          EUDSL_PYTHON_EXTRAS_URL=$(gh release view eudsl-python-extras --repo llvm/eudsl --json 'assets' -q '.assets | last | .url')
+          echo "Downloading ${EUDSL_PYTHON_EXTRAS_NAME} from ${EUDSL_PYTHON_EXTRAS_URL}"
+          wget -O page/static/${EUDSL_PYTHON_EXTRAS_NAME} "${MLIR_PYTHON_WHEEL_URL}"
+          echo "EUDSL_PYTHON_EXTRAS_NAME=$EUDSL_PYTHON_EXTRAS_NAME" >> $GITHUB_ENV
+          echo "EUDSL_PYTHON_EXTRAS_URL=$EUDSL_PYTHON_EXTRAS_URL" >> $GITHUB_ENV
+  
       - name: Create WASM console page
         run: |
           mkdir -p page/console
@@ -39,6 +46,7 @@ jobs:
           cp index.template.html page/console/index.html
           sed -i 's/{{PYODIDE_VERSION}}/v0.27.7/g' page/console/index.html
           sed -i "s#{{MLIR_PYTHON_WHEEL_PATH}}#../static/${MLIR_PYTHON_WHEEL_NAME}#g" page/console/index.html
+          sed -i "s#{{EUDSL_PYTHON_EXTRAS_PATH}}#../static/${EUDSL_PYTHON_EXTRAS_NAME}#g" page/console/index.html
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -53,7 +61,7 @@ jobs:
         run: |
           mkdir -p page/jupyter
 
-          jupyter lite build --output-dir page/jupyter --piplite-wheels ./page/static/$MLIR_PYTHON_WHEEL_NAME
+          jupyter lite build --output-dir page/jupyter --piplite-wheels ./page/static/$MLIR_PYTHON_WHEEL_NAME --piplite-wheels ./page/static/$EUDSL_PYTHON_EXTRAS_NAME
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
