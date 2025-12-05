@@ -109,7 +109,7 @@
         });
 
         await pyodide.loadPackage("{{MLIR_PYTHON_WHEEL_PATH}}");
-        await pyodide.loadPackage("{{EUDSL_PYTHON_EXTRAS_PATH}}");
+        // await pyodide.loadPackage("{{EUDSL_PYTHON_EXTRAS_PATH}}");
 
         let { repr_shorten, BANNER, PyodideConsole } =
           pyodide.pyimport("pyodide.console");
