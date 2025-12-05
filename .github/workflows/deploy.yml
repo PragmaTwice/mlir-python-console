@@ -36,7 +36,7 @@ jobs:
 
           cp index.template.html page/console/index.html
           sed -i 's/{{PYODIDE_VERSION}}/v0.27.0/g' page/console/index.html
-          sed -i "s/{{MLIR_PYTHON_WHEEL_PATH}}/${MLIR_PYTHON_WHEEL_NAME}/g" page/console/index.html
+          sed -i "s/{{MLIR_PYTHON_WHEEL_PATH}}/..\/static\/${MLIR_PYTHON_WHEEL_NAME}/g" page/console/index.html
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -49,6 +49,7 @@ jobs:
 
       - name: Create WASM jupyterlite page
         run: |
+          mkdir -p content
           mkdir -p page/jupyter
 
           jupyter lite build --contents content --output-dir page/jupyter
