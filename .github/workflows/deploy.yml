@@ -29,6 +29,8 @@ jobs:
           MLIR_PYTHON_WHEEL_URL=$(gh release view mlir-python-bindings --repo llvm/eudsl --json 'assets' -q '[.assets[] | select(.name | contains("cp312-pyodide")) | .url] | last')
           echo "Downloading ${MLIR_PYTHON_WHEEL_NAME} from ${MLIR_PYTHON_WHEEL_URL}"
           wget -O page/static/${MLIR_PYTHON_WHEEL_NAME} "${MLIR_PYTHON_WHEEL_URL}"
+          echo "MLIR_PYTHON_WHEEL_NAME=$MLIR_PYTHON_WHEEL_NAME" >> $GITHUB_ENV
+          echo "MLIR_PYTHON_WHEEL_URL=$MLIR_PYTHON_WHEEL_URL" >> $GITHUB_ENV
 
       - name: Create WASM console page
         run: |
