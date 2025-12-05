@@ -16,11 +16,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create WASM playground page
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p page
 
-          MLIR_PYTHON_WHEEL_NAME=$(gh release view mlir-python-bindings --json 'assets' -q '[.assets[] | select(.name | contains("cp312-pyodide")) | .name] | last')
-          MLIR_PYTHON_WHEEL_URL=$(gh release view mlir-python-bindings --json 'assets' -q '[.assets[] | select(.name | contains("cp312-pyodide")) | .url] | last')
+          MLIR_PYTHON_WHEEL_NAME=$(gh release view mlir-python-bindings --repo llvm/eudsl --json 'assets' -q '[.assets[] | select(.name | contains("cp312-pyodide")) | .name] | last')
+          MLIR_PYTHON_WHEEL_URL=$(gh release view mlir-python-bindings --repo llvm/eudsl --json 'assets' -q '[.assets[] | select(.name | contains("cp312-pyodide")) | .url] | last')
           echo "Downloading ${MLIR_PYTHON_WHEEL_NAME} from ${MLIR_PYTHON_WHEEL_URL}"
           wget -O page/${MLIR_PYTHON_WHEEL_NAME} "${MLIR_PYTHON_WHEEL_URL}"
 
